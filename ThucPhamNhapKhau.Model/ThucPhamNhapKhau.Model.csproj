@@ -50,12 +50,16 @@
     <Compile Include="CTyXuatKhau\CTyXuatKhau.cs" />
     <Compile Include="CuaKhau\CuaKhau.cs" />
     <Compile Include="LoaiKiemTra\LoaiKiemTra.cs" />
-    <Compile Include="LoHang\LoHang.cs" />
+    <Compile Include="LoHang\Request\ThongTinLoHang.cs" />
+    <Compile Include="LoHang\Request\KetQuaKiemTra.cs" />
+    <Compile Include="MatHang\MatHang.cs" />
     <Compile Include="NhomChiTieu\NhomChiTieu.cs" />
     <Compile Include="NhomMatHang\NhomMatHang.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="LoHang\Response\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
