@@ -1,0 +1,801 @@
+﻿@{
+    ViewBag.Title = "Chỉ định";
+}
+<script type="text/javascript">
+    var thaotac = 0;
+    var idlohang = 0;
+
+    $(document).ready(function () {
+        ListLoaiKiemTra();
+        ListMathang();
+        $("#form_input_mathang").submit(function (event) {
+            // cancels the form submission
+            event.preventDefault();
+            Save();
+        });
+
+        $("#form_input_dinhchitieu").submit(function (event) {
+            // cancels the form submission
+            event.preventDefault();
+            SaveChiTieu();
+        });
+    });
+
+    function isNULL(value) {
+        if (value == null)
+            return "";
+        else
+            return value;
+    }
+
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (window.event) {//IE
+            keynum = e.keyCode;
+        }
+        else if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13 || keynum == 46) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+    var pageSize = 10;
+    var pageIndex = 1;
+    function ListMathang() {
+        var stt = ((pageIndex - 1) * 10) + 1;
+
+        $.ajax({
+            type: "get",
+            url: "ListHoSo/",
+            data: 'pageIndex=' + pageIndex + '&pageSize=' + pageSize,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                var tb = $('#table1');
+                tb.empty();
+                var s="";
+                var response = jQuery.parseJSON(JSON.stringify(data));
+                if (response && response.length) {
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+                        s += "<tr>";
+                        s += "<td class='text-center' style='width:50px;'><span style='height:10px;' class='glyphicon glyphicon-arrow-right' onclick='Show(this, " + ri.ID + ");'></span></td>";
+                        s += "<td class='text-center'><span class='glyphicon glyphicon-plus' data-target='#input_modal_mathang' data-toggle='modal'  onclick='Show1(this, " + ri.ID + ");'></span></td>";
+                        s += "<td class='text-center'><h5>" + stt + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.sochungthu) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngaycapchungthu) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.tenctyxk + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.tenctynk + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.sohopdong) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngay_hopdong) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.sotkhq) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngaytkhq) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.sodangky) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngay_dangky) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.tennhomhang) + "</h5></td>";
+                        if (ri.maudich == null) {
+                            s += "<td class='text-center'></td>";
+                        } else {
+                            if (ri.maudich == false) {
+                                s += "<td class='text-center'><input type='checkbox' style='width:18px;'/></td>";
+                            } else {
+                                s += "<td class='text-center'><input type='checkbox' style='width:18px;' checked/></td>";
+                            }
+
+                        }
+                        s += "<td class='text-center'><h5>" + isNULL(ri.xuatxu) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.hansudung) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.sovandon) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngay_vandon) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.donvitinh) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.soluong + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.NW + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.GW + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.giatrilohang + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.cuakhaudi) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.cuakhauden) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngaylaymau) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.diadiemlaymau) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngayguimau) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.chiphidangky + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.motavandekiemtra) + "</h5></td>";
+                        if (ri.ketqua == null) {
+                            s += "<td class='text-center'></td>";
+                        } else {
+                            if (ri.ketqua == false) {
+                                s += "<td class='text-center'><input type='checkbox' style='width:18px;'/></td>";
+                            } else {
+                                s += "<td class='text-center'><input type='checkbox' style='width:18px;' checked/></td>";
+                            }
+
+                        }
+                        s += "<td class='text-center'><h5>" + isNULL(ri.sophieuthu) + "</h5></td>";
+                        s += "</tr>";
+                        s += "<tr style='display:none'>";
+                        s += "</tr>";
+                        stt++;
+                        
+                    }
+                }
+               
+                tb.append(s);
+                tb.html(s);
+            }
+        });
+    }
+
+    var id_tr;
+    function Show(idtr, id) {
+      
+        if ($(idtr).hasClass("glyphicon-arrow-right")) {
+            $(idtr).removeClass('glyphicon-arrow-right').addClass("glyphicon-arrow-down");
+        } else {
+            $(idtr).removeClass('glyphicon-arrow-down').addClass('glyphicon-arrow-right');
+        }
+        
+        id_tr = idtr;
+        idlohang = id;
+        var stt = 1;
+        var s = "";
+        s += "<td colspan=33>";
+        s += "<table class='table-hover table-bordered container container-fluid' style='width:90%; margin:0px auto;'>";
+        s += "<thead>";
+        s += "<tr class='bg-info'>";
+        s += "<th class='text-center' style='width:50px;'></th>";
+        s += "<th class='text-center' style='width:50px;'><h5>STT</h5></th>";
+        s += "<th class='text-center' style='width:500px;'><h5>Tên mặt hàng</h5></th>";
+        s += "<th class='text-center' style='width:300px;'><h5>Nơi sản xuất</h5></th>";
+        s += "<th class='text-center' style='width:150px;'><h5>Số lượng</h5></th>";
+        s += "<th class='text-center' style='width:150px;'><h5>Khối lượng</h5></th>";
+        s += "<th class='text-center' style='width:150px;'><h5>Giá trị hàng hóa</h5></th>";
+        s += "<th class='text-center' style='width:150px;'><h5>Số đăng ký</h5></th>";
+        s += "<th class='text-center' style='width:150px;'><h5>Chế độ kiểm tra</h5></th>";
+        s += "<th class='text-center' style='width:300px;'><h5>Kết quả</h5></th>";
+        s += "<th class='text-center' style='width:500px;'><h5>Lý do không đạt</h5></th>";
+        s += "<th class='text-center' style='width:500px;'><h5>Biện pháp xử lý</h5></th>";
+        s += "<th class='text-center' style='width:150px;'><h5>Số công bố</h5></th>";
+        s += "</tr>";
+        s += "</thead>";
+        s += "<tbody id='table2'>";
+        s += "</tbody>";
+        s += "</table>";
+        s += "</td>";
+        
+        $(id_tr).parent().parent().next().append(s);
+        $(id_tr).parent().parent().next().html(s);
+        s = "";
+        $.ajax({
+            type: "get",
+            url: "ListMatHang/",
+            data: 'id=' + id,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                var tb = $('#table2');
+                tb.empty();
+                var response = jQuery.parseJSON(JSON.stringify(data));
+                if (response && response.length) {
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+                        s += "<tr>";
+                        s += "<td class='text-center'><span class='glyphicon glyphicon-edit' data-target='#input_modal_mathang' data-toggle='modal' onclick=GetMatHangByID('" + ri.ID + "');></span>&nbsp;&nbsp;<span class='glyphicon glyphicon-trash' data-target='#confirm_modal' data-toggle='modal' onclick=DeleteMatHang('" + ri.ID + "');></span></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + stt + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.tenmathang) + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.noisanxuat) + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + ri.soluong + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + ri.khoiluong + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.giatrihanghoa) + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.sodangky) + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.loaikiemtra) + "</h5></td>";
+
+                        if (ri.dat == null) {
+                            s += "<td class='text-center'></td>";
+                        } else {
+                            if (ri.dat == false) {
+                                s += "<td class='text-center'><input type='checkbox' style='width:18px;'/></td>";
+                            } else {
+                                s += "<td class='text-center'><input type='checkbox' style='width:18px;' checked/></td>";
+                            }
+                            
+                        }
+                        
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.lydokhongdat) + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.bienphapxuly) + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.socongbo) + "</h5></td>";
+                        s += "</tr>";
+
+                        stt++;
+                    }
+                }
+                tb.append(s);
+                tb.html(s);
+            }
+        });
+        $(id_tr).parent().parent().next().fadeToggle(1);
+    }
+
+    function Show1(idtr, id) {
+        
+        $('#input_tenmathang').val("");
+        $('#input_noisanxuat').val("");
+        $('#input_soluong').val("");
+        $('#input_khoiluong').val("");
+        $('#input_giatrihanghoa').val("");
+        document.getElementById("cbb_loaikiemtra").selectedIndex = 0;
+        $('#input_socongbo').val("");
+        thaotac = 0;
+
+        id_tr = idtr;
+        idlohang = id;
+        var stt = 1;
+        var s = "";
+        s += "<td colspan=33>";
+        s += "<table class='table-hover table-bordered container container-fluid' style='width:90%; margin:0px auto;'>";
+        s += "<thead>";
+        s += "<tr class='bg-info'>";
+        s += "<th class='text-center' style='width:50px;'></th>";
+        s += "<th class='text-center' style='width:50px;'><h5>STT</h5></th>";
+        s += "<th class='text-center' style='width:500px;'><h5>Tên mặt hàng</h5></th>";
+        s += "<th class='text-center' style='width:300px;'><h5>Nơi sản xuất</h5></th>";
+        s += "<th class='text-center' style='width:150px;'><h5>Số lượng</h5></th>";
+        s += "<th class='text-center' style='width:150px;'><h5>Khối lượng</h5></th>";
+        s += "<th class='text-center' style='width:150px;'><h5>Giá trị hàng hóa</h5></th>";
+        s += "<th class='text-center' style='width:150px;'><h5>Số đăng ký</h5></th>";
+        s += "<th class='text-center' style='width:150px;'><h5>Chế độ kiểm tra</h5></th>";
+        s += "<th class='text-center' style='width:300px;'><h5>Kết quả</h5></th>";
+        s += "<th class='text-center' style='width:500px;'><h5>Lý do không đạt</h5></th>";
+        s += "<th class='text-center' style='width:500px;'><h5>Biện pháp xử lý</h5></th>";
+        s += "<th class='text-center' style='width:150px;'><h5>Số công bố</h5></th>";
+        s += "</tr>";
+        s += "</thead>";
+        s += "<tbody id='table2'>";
+        s += "</tbody>";
+        s += "</table>";
+        s += "</td>";
+
+        $(id_tr).parent().parent().next().append(s);
+        $(id_tr).parent().parent().next().html(s);
+        s = "";
+        $.ajax({
+            type: "get",
+            url: "ListMatHang/",
+            data: 'id=' + id,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                var tb = $('#table2');
+                tb.empty();
+                var response = jQuery.parseJSON(JSON.stringify(data));
+                if (response && response.length) {
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+                        s += "<tr>";
+                        s += "<td class='text-center'><span class='glyphicon glyphicon-edit' data-target='#input_modal_mathang' data-toggle='modal' onclick=GetMatHangByID('" + ri.ID + "');></span>&nbsp;&nbsp;<span class='glyphicon glyphicon-trash' data-target='#confirm_modal' data-toggle='modal' onclick=DeleteMatHang('" + ri.ID + "');></span></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + stt + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.tenmathang) + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.noisanxuat) + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + ri.soluong + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + ri.khoiluong + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.giatrihanghoa) + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.sodangky) + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.loaikiemtra) + "</h5></td>";
+
+                        if (ri.dat == null) {
+                            s += "<td class='text-center'></td>";
+                        } else {
+                            if (ri.dat == false) {
+                                s += "<td class='text-center'><input type='checkbox' style='width:18px;'/></td>";
+                            } else {
+                                s += "<td class='text-center'><input type='checkbox' style='width:18px;' checked/></td>";
+                            }
+
+                        }
+
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.lydokhongdat) + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.bienphapxuly) + "</h5></td>";
+                        s += "<td class='text-center' data-target='#input_modal_chitiet' data-toggle='modal' style='cursor:pointer;' onclick=ListChiTietMathang('" + ri.ID + "');><h5>" + isNULL(ri.socongbo) + "</h5></td>";
+                        s += "</tr>";
+
+                        stt++;
+                    }
+                }
+                tb.append(s);
+                tb.html(s);
+            }
+        });
+        $(id_tr).parent().prev().children().removeClass('glyphicon-arrow-right').addClass("glyphicon-arrow-down");
+        $(id_tr).parent().parent().next().show(1);
+    }
+
+    function ListLoaiKiemTra() {
+        $.ajax({
+            type: "get",
+            url: "ListLoaiKiemTra/",
+            data: '',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (data) {
+                var tb = $('#cbb_loaikiemtra');
+
+                tb.empty();
+                var s;
+                s += '<option value="">Chọn loại kiểm tra</option>'
+                var response = jQuery.parseJSON(JSON.stringify(data));
+
+                if (response && response.length) {
+
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+
+                        s += '<option value=' + ri.Id + '>' + ri.Name + '</option>'
+                    }
+                }
+
+                tb.append(s);
+                tb.html(s);
+            }
+        });
+    }
+
+    var idMatHang = 0;
+    function GetMatHangByID(id) {
+        idMatHang = id;
+        var tenmathang = $('#input_tenmathang');
+        var noisanxuat = $('#input_noisanxuat');
+        var soluong = $('#input_soluong');
+        var khoiluong = $('#input_khoiluong');
+        var giatrihanghoa = $('#input_giatrihanghoa');
+        var loaikiemtra = document.getElementById("cbb_loaikiemtra");
+        var socongbo = $('#input_socongbo');
+
+        $('#error').hide();
+        $.ajax({
+            type: "get",
+            url: "GetMatHangByID/",
+            data: 'id=' + idMatHang,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (data) {
+                
+                tenmathang.val(data.tenmathang);
+                noisanxuat.val(data.noisanxuat);
+                soluong.val(data.soluong);
+                khoiluong.val(data.khoiluong);
+                giatrihanghoa.val(data.giatrihanghoa);
+                for (var i = 0; i < loaikiemtra.options.length; i++) {
+                    if (loaikiemtra.options[i].value == data.idloaikiemtra) {
+                        loaikiemtra.selectedIndex = i;
+                        break;
+                    } else {
+                        loaikiemtra.selectedIndex = 0;
+                    }
+                }
+                socongbo.val(data.socongbo);
+            }
+        });
+        thaotac = 1;
+
+    }
+
+    function Save() {
+        var tenmathang = $('#input_tenmathang');
+        var noisanxuat = $('#input_noisanxuat');
+        var soluong = $('#input_soluong');
+        var khoiluong = $('#input_khoiluong');
+        var giatrihanghoa = $('#input_giatrihanghoa');
+        var loaikiemtra = document.getElementById("cbb_loaikiemtra");
+        var socongbo = $('#input_socongbo');
+        
+        if (thaotac == 0) {
+            $.post("InsertMatHang/",
+            {
+                idlohang: idlohang,
+                tenmathang: tenmathang.val(),
+                noisanxuat: noisanxuat.val(),
+                soluong: soluong.val(),
+                khoiluong: khoiluong.val(),
+                giatrihanghoa: giatrihanghoa.val(),
+                idloaikiemtra: loaikiemtra.options[loaikiemtra.selectedIndex].value,
+                socongbo: socongbo.val()
+            },
+            function (data, status) {
+                var response = jQuery.parseJSON(JSON.stringify(data));
+                
+                    if (response.Id >= 0) {
+                        Show1(id_tr, idlohang);
+                        Show1(id_tr, idlohang);
+                        $('#input_modal_mathang').modal('hide');
+                        //$('#success_modal').modal('show');
+                    } else {
+                        $('#input_modal_mathang').modal('show');
+                        $('#error').show();
+                    }
+
+            });
+        } else {
+            $.post("UpdateMatHang/",
+            {
+                id: idMatHang,
+                idlohang: idlohang,
+                tenmathang: tenmathang.val(),
+                noisanxuat: noisanxuat.val(),
+                soluong: soluong.val(),
+                khoiluong: khoiluong.val(),
+                giatrihanghoa: giatrihanghoa.val(),
+                idloaikiemtra: loaikiemtra.options[loaikiemtra.selectedIndex].value,
+                socongbo: socongbo.val()
+
+            },
+            function (data, status) {
+                var response = jQuery.parseJSON(JSON.stringify(data));
+              
+                    if (response.Id >= 0) {
+                        Show1(id_tr, idlohang);
+                        $('#input_modal_mathang').modal('hide');
+                        //$('#success_modal').modal('show');
+                    } else {
+                        $('#input_modal_mathang').modal('show');
+                        $('#error').show();
+                    }
+                
+            });
+        }
+    }
+
+    function DeleteMatHang(id) {
+
+        $('#error').hide();
+        $.ajax({
+            type: "get",
+            url: "DeleteMatHang/",
+            data: 'id=' + id,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (data) {
+                Show1(id_tr, idlohang);
+            }
+        });
+
+    }
+
+    function ListChiTietMathang(id) {
+        $('.nav-pills a:first').tab('show');
+        idMatHang = id;
+        var stt = 1;
+        $.ajax({
+            type: "get",
+            url: "ListChiTietMathang/",
+            data: 'id=' + idMatHang,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                var tb = $('#table3');
+                tb.empty();
+                var s = "";
+                var response = jQuery.parseJSON(JSON.stringify(data));
+                if (response && response.length) {
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+                        s += "<tr>";
+                        s += "<td class='text-center' style='width:50px;'><span class='glyphicon glyphicon-edit' onclick=ChiTietMatHangByID('" + ri.ID + "');></span>&nbsp;&nbsp;<span class='glyphicon glyphicon-trash' data-target='#confirm_modal' data-toggle='modal' onclick=DeleteChiTietMatHang('" + ri.ID + "');></span></td>";
+                        s += "<td class='text-center' style=' cursor:pointer;' onclick=DinhChiTieu('" + ri.ID + "');><h5>" + stt + "</h5></td>";
+                        s += "<td class='text-center' style=' cursor:pointer;' onclick=DinhChiTieu('" + ri.ID + "');><h5>" + isNULL(ri.tenmathang) + "</h5></td>";
+                        s += "<td class='text-center' style=' cursor:pointer;' onclick=DinhChiTieu('" + ri.ID + "');><h5>" + isNULL(ri.soluong) + "</h5></td>";
+                        s += "<td class='text-center' style=' cursor:pointer;' onclick=DinhChiTieu('" + ri.ID + "');><h5>" + ri.NW + "</h5></td>";
+                        s += "<td class='text-center' style=' cursor:pointer;' onclick=DinhChiTieu('" + ri.ID + "');><h5>" + ri.GW + "</h5></td>";
+                        s += "<td class='text-center' style=' cursor:pointer;' onclick=DinhChiTieu('" + ri.ID + "');><h5>" + isNULL(ri.lot_batch) + "</h5></td>";
+                        s += "<td class='text-center' style=' cursor:pointer;' onclick=DinhChiTieu('" + ri.ID + "');><h5>" + isNULL(ri.xuatxu) + "</h5></td>";
+                        s += "<td class='text-center' style=' cursor:pointer;' onclick=DinhChiTieu('" + ri.ID + "');><h5>" + isNULL(ri.ngaysx) + "</h5></td>";
+                        s += "<td class='text-center' style=' cursor:pointer;' onclick=DinhChiTieu('" + ri.ID + "');><h5>" + isNULL(ri.hansudung) + "</h5></td>";
+                        s += "</tr>";
+
+                        stt++;
+
+                    }
+                }
+
+                tb.append(s);
+                tb.html(s);
+            }
+        });
+    }
+
+    var idchitiet = 0;
+    function DinhChiTieu(id) {
+        $('.nav-pills a:last').tab('show');
+        idchitiet = id;
+        ListChiTieuMathang();
+    }
+    var items = new Array();
+    function ListChiTieu() {
+        var stt = 1;
+        $.ajax({
+            type: "get",
+            url: "ListChiTieu/",
+            data: '',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (data) {
+                var tb = $('#table4');
+                tb.empty();
+                var s = "";
+                var response = jQuery.parseJSON(JSON.stringify(data));
+
+                if (response && response.length) {
+                    
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+                        s += "<tr>";
+
+                        s += "<td class='text-center'><h5>" + stt + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.Name) + "</h5></td>";
+                        
+                        if (items.indexOf(ri.Id) > -1) {
+                            s += "<td class='text-center'><input type='checkbox' value=" + ri.Id + " checked='checked' onclick='SaveChiTieu(this);' /></td>";
+                        } else {
+                            s += "<td class='text-center'><input type='checkbox' value=" + ri.Id + " onclick='SaveChiTieu(this);' /></td>";
+                        }
+                        s += "</tr>";
+
+                        stt++;
+
+                    }
+                }
+                tb.append(s);
+                tb.html(s);
+            }
+        });
+    }
+    
+    function ListChiTieuMathang() {
+
+        items = new Array();
+        $.ajax({
+            type: "get",
+            url: "ListChiTieuMathang/",
+            data: 'id=' + idchitiet,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                
+                var response = jQuery.parseJSON(JSON.stringify(data));
+                if (response && response.length) {
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+                        
+                        items[i] = ri.idchitieu;
+                    }
+                }
+            }
+        });
+        ListChiTieu();
+    }
+    function SaveChiTieu(idct) {
+
+        if ($(idct).is(':checked') == true) {
+            $.ajax({
+                type: "get",
+                url: "InsertChiTieu/",
+                data: 'idchitiet=' + idchitiet + "&idchitieu=" + $(idct).val(),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+
+                success: function (data) {
+                }
+            });
+        } else {
+
+            $.ajax({
+                type: "get",
+                url: "DeleteChiTieu/",
+                data: 'idchitiet=' + idchitiet + "&idchitieu=" + $(idct).val(),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+
+                success: function (data) {
+                }
+            });
+        }
+    }
+
+</script>
+
+<div class="panel panel-primary" style="margin-top: 5px; height: 400px;">
+    <div class="panel-heading"><span class="glyphicon glyphicon-list"></span>&nbsp;Thông tin lô hàng</div>
+    <div class="panel-body">
+        <div style="width: 100%;height: 340px; overflow-x: scroll;">
+            <table class="table-hover table-bordered container container-fluid" style="width:4000px;">
+                <thead>
+                    <tr class="bg-primary">
+                        <th class="text-center" style="width:50px;"></th>
+                        <th class="text-center" style="width:50px;"></th>
+                        <th class="text-center" style="width:50px;"><h5>STT</h5></th>
+                        <th class="text-center" style="width:100px;"><h5>Số chứng thư</h5></th>
+                        <th class="text-center" style="width:80px;"><h5>Ngày</h5></th>
+                        <th class="text-center" style="width:400px;"><h5>Tên Cty xuất khẩu</h5></th>
+                        <th class="text-center" style="width:400px;"><h5>Tên Cty nhập khẩu</h5></th>
+                        <th class="text-center" style="width:100px;"><h5>Số hợp đồng</h5></th>
+                        <th class="text-center" style="width:80px;"><h5>Ngày</h5></th>
+                        <th class="text-center" style="width:100px;"><h5>Số TKHQ</h5></th>
+                        <th class="text-center" style="width:80px;"><h5>Ngày</h5></th>
+                        <th class="text-center" style="width:100px;"><h5>Số ĐK</h5></th>
+                        <th class="text-center" style="width:80px;"><h5>Ngày</h5></th>
+                        <th class="text-center"><h5>Nhóm hàng hóa</h5></th>
+                        <th class="text-center"><h5>Mậu dịch</h5></th>
+                        <th class="text-center"><h5>Xuất xứ</h5></th>
+                        <th class="text-center"><h5>Hạn sử dụng</h5></th>
+                        <th class="text-center"><h5>Vận đơn</h5></th>
+                        <th class="text-center"><h5>Ngày</h5></th>
+                        <th class="text-center"><h5>Đơn vị</h5></th>
+                        <th class="text-center"><h5>Số lượng</h5></th>
+                        <th class="text-center"><h5>NW</h5></th>
+                        <th class="text-center"><h5>GW</h5></th>
+                        <th class="text-center"><h5>Giá trị lô hàng</h5></th>
+                        <th class="text-center"><h5>Cửa khẩu đi</h5></th>
+                        <th class="text-center"><h5>Cửa khẩu đến</h5></th>
+                        <th class="text-center"><h5>Ngày lấy mẫu</h5></th>
+                        <th class="text-center"><h5>Địa điểm lấy mẫu</h5></th>
+                        <th class="text-center"><h5>Ngày gửi mẫu</h5></th>
+                        <th class="text-center"><h5>Chi phí đăng ký</h5></th>
+                        <th class="text-center"><h5>Vấn đề kiểm tra</h5></th>
+                        <th class="text-center"><h5>Đã xử lý</h5></th>
+                        <th class="text-center"><h5>Số phiếu thu</h5></th>
+                    </tr>
+                </thead>
+
+                <tbody id="table1">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="input_modal_mathang" style="width:100%">
+    <div class="modal-dialog" style="width: 90%">
+        <div class="modal-content">
+            <div class="modal-header bg-warning" style="margin-bottom:5px;">
+                <button class="close" data-dismiss="modal" onclick="LoadForm();">&times;</button>
+                <div class="modal-title text-primary">Thông tin</div>
+            </div>
+            <div class="modal-body" style="height:200px;">
+                <form class="form-horizontal" id="form_input_mathang">
+                    <div class="form-group col-md-12">
+
+                        <div class="col-md-6">
+                            <label for="name" class="control-label text-info">Tên mặt hàng</label>
+
+                            <input type="text" class="form-control " id="input_tenmathang" required />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="name" class="control-label text-info">Nơi sản xuất</label>
+
+                            <input type="text" class="form-control " id="input_noisanxuat" required />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="name" class="control-label text-info">Số lượng</label>
+
+                            <input type="text" class="form-control " id="input_soluong" onkeypress="return ValidateKeypress(/\d/,event);" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+
+                        <div class="col-md-3">
+                            <label for="name" class="control-label text-info">Khối lượng</label>
+
+                            <input type="text" class="form-control " id="input_khoiluong" onkeypress="return ValidateKeypress(/\d/,event);" required />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="name" class="control-label text-info">Giá trị hàng hóa</label>
+
+                            <input type="text" class="form-control " id="input_giatrihanghoa" onkeypress="return ValidateKeypress(/\d/,event);" required />
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="name" class="control-label text-info">Chế độ kiểm</label>
+
+                            <select class="form-control" id="cbb_loaikiemtra" required></select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="name" class="control-label text-info">Số công bố</label>
+
+                            <input type="text" class="form-control " id="input_socongbo" required />
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-success" style="margin-top:25px;"><span class="glyphicon glyphicon-floppy-save"></span>&nbsp;Lưu</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer bg-danger text-center" id="error" style="display:none;">
+                <h5 style="color:red;">LỖI: Cập nhật không thành công</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="input_modal_chitiet" style="width:100%;">
+    <div class="modal-dialog" style="width: 90%">
+        <div class="modal-content">
+            <div class="modal-header bg-warning" style="margin-bottom:5px;">
+                <button class="close" data-dismiss="modal" onclick="LoadForm();">&times;</button>
+                <div class="modal-title text-primary">Thông tin</div>
+            </div>
+            <div class="modal-body" style="height:500px;">
+                <div class="tab-content" style="background: #ffffff; margin-left: 20px; margin-right: 20px;">
+                    <ul class="nav nav-pills" id="nav">
+                        <li class="active"><a href="#p1" data-toggle="pill"  onclick="loadDanhSachHoaChat(1);">Chi tiết hàng hóa</a></li>
+                        <li><a href="#p2" data-toggle="pill" onclick="loadBangGiaHoaChat(1);">Định chỉ tiêu</a></li>
+
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="p1">
+                            <div class="panel panel-primary" style="margin-top:10px;">
+                                <div class="panel-heading"><span class="glyphicon glyphicon-list"></span>&nbsp;Bảng chi tiết hàng hóa đã kiểm tra</div>
+                                <div class="panel-body" style="width: 100%; overflow-x: scroll;">
+
+                                    <table class="table-hover table-bordered" style="width:1500px;">
+                                        <thead>
+                                            <tr class="bg-primary">
+                                                <th class="text-center" style="width:50px;"></th>
+                                                <th class="text-center" style="width:50px;"><h5>STT</h5></th>
+                                                <th class="text-center" style="width:300px;"><h5>Tên mặt hàng</h5></th>
+                                                <th class="text-center" style="width:80px;"><h5>Số lượng</h5></th>
+                                                <th class="text-center" style="width:80px;"><h5>NW</h5></th>
+                                                <th class="text-center" style="width:80px;"><h5>GW</h5></th>
+                                                <th class="text-center" style="width:100px;"><h5>LOT/BATCH</h5></th>
+                                                <th class="text-center" style="width:100px;"><h5>Xuất xứ</h5></th>
+                                                <th class="text-center" style="width:80px;"><h5>Ngày sản xuất</h5></th>
+                                                <th class="text-center" style="width:80px;"><h5>Hạn sử dụng</h5></th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="table3"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="p2">
+                            
+                            <div class="panel panel-primary" style="margin-top:10px;">
+                                <div class="panel-heading"><span class="glyphicon glyphicon-list"></span>&nbsp;Bảng chỉ tiêu hàng hóa</div>
+                                <div class="panel-body" style="width: 100%; overflow-x: scroll;">
+
+                                    <table class="table-hover table-bordered" style="width:900px; margin:0px auto;">
+                                        <thead>
+                                            <tr class="bg-primary">
+                                                <th class="text-center" style="width:50px;"><h5>STT</h5></th>
+                                                <th class="text-center" style="width:800px;"><h5>Tên chỉ tiêu</h5></th>
+                                                <th class="text-center" style="width:800px;"></th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="table4"></tbody>
+                                    </table>
+                                    <div class="text-center" id="page">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-danger text-center" id="error" style="display:none;">
+                <h5 style="color:red;">LỖI: Cập nhật không thành công</h5>
+            </div>
+        </div>
+    </div>
+</div>
