@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ThucPhamNhapKhau.Model.LoHang
+namespace ThucPhamNhapKhau.Model.LoaiKiemTra
 {
     [ProtoContract]
     public class LoaiKiemTra

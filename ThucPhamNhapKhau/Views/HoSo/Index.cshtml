@@ -3,6 +3,568 @@
     ViewBag.Title = "Nhận hồ sơ";
 }
 <script type="text/javascript">
+    var thaotac = 0;
+    $(document).ready(function () {
+        ListCongTyXuatKhau();
+        ListCongTyNhapKhau();
+        ListNhomHangHoa();
+        ListXuatXu();
+        ListDonVi();
+        ListHoSo();
+        
+        $("#form_input_hoso").submit(function (event) {
+            // cancels the form submission
+            event.preventDefault();
+            Save();
+        });
+
+        $("#input_diachictyxuatkhau").attr("disabled", true);
+        $("#input_diachictynhapkhau").attr("disabled", true);
+
+        $('.datePicker')
+        .datepicker({
+            format: 'dd/mm/yyyy'
+        })
+        .on('changeDate', function (e) {
+            // Revalidate the date field
+            $('#eventForm').formValidation('revalidateField', 'date');
+        });
+        
+    });
+
+    function ListCongTyXuatKhau() {
+        $.ajax({
+            type: "get",
+            url: "ListCongTyXuatKhau/",
+            data: '',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (data) {
+               
+                var tb = $('#cbb_ctyxuatkhau');
+
+                tb.empty();
+                var s;
+                s += '<option value="">Chọn công ty xuất khẩu</option>'
+                var response = jQuery.parseJSON(JSON.stringify(data));
+
+                if (response && response.length) {
+
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+
+                        s += '<option value=' + ri.Id + '>' + ri.Name + '</option>'
+                    }
+                }
+
+                tb.append(s);
+                tb.html(s);
+            }
+        });
+    }
+
+    function LoadDiaChiCTyXuatKhau(id) {
+        if ($(id).val() == "") {
+            $('#input_diachictyxuatkhau').val("");
+        } else {
+            $.ajax({
+                type: "get",
+                url: "CongTyXuatKhauGetDiaChi/",
+                data: 'id=' + $(id).val(),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+
+                success: function (data) {
+                    $('#input_diachictyxuatkhau').val(data.Name);
+                }
+            });
+        }
+    }
+
+    function ListCongTyNhapKhau() {
+        $.ajax({
+            type: "get",
+            url: "ListCongTyNhapKhau/",
+            data: '',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (data) {
+                var tb = $('#cbb_ctynhapkhau');
+
+                tb.empty();
+                var s;
+                s += '<option value="">Chọn công ty nhập khẩu</option>'
+                var response = jQuery.parseJSON(JSON.stringify(data));
+
+                if (response && response.length) {
+
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+
+                        s += '<option value=' + ri.Id + '>' + ri.Name + '</option>'
+                    }
+                }
+
+                tb.append(s);
+                tb.html(s);
+            }
+        });
+    }
+
+    function LoadDiaChiCTyNhapKhau(id) {
+        if ($(id).val() == "") {
+            $('#input_diachictynhapkhau').val("");
+        } else {
+            $.ajax({
+                type: "get",
+                url: "CongTyNhapKhauGetDiaChi/",
+                data: 'id=' + $(id).val(),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+
+                success: function (data) {
+                    $('#input_diachictynhapkhau').val(data.Name);
+                }
+            });
+        }
+        
+    }
+    function ListNhomHangHoa() {
+        $.ajax({
+            type: "get",
+            url: "ListNhomHangHoa/",
+            data: '',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (data) {
+                var tb = $('#cbb_nhomhanghoa');
+
+                tb.empty();
+                var s;
+                s += '<option value="">Chọn nhóm hàng hóa</option>'
+                var response = jQuery.parseJSON(JSON.stringify(data));
+
+                if (response && response.length) {
+
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+
+                        s += '<option value=' + ri.Id + '>' + ri.Name + '</option>'
+                    }
+                }
+
+                tb.append(s);
+                tb.html(s);
+            }
+        });
+    }
+
+    function ListXuatXu() {
+        $.ajax({
+            type: "get",
+            url: "ListXuatXu/",
+            data: '',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (data) {
+                var tb = $('#cbb_xuatxu');
+
+                tb.empty();
+                var s;
+                s += '<option value="">Chọn xuất xứ</option>'
+                var response = jQuery.parseJSON(JSON.stringify(data));
+
+                if (response && response.length) {
+
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+
+                        s += '<option value=' + ri.Id + '>' + ri.Name + '</option>'
+                    }
+                }
+
+                tb.append(s);
+                tb.html(s);
+            }
+        });
+    }
+
+    function ListDonVi() {
+        $.ajax({
+            type: "get",
+            url: "ListDonVi/",
+            data: '',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (data) {
+                var tb = $('#cbb_donvi');
+
+                tb.empty();
+                var s;
+                s += '<option value="">Chọn đơn vị</option>'
+                var response = jQuery.parseJSON(JSON.stringify(data));
+
+                if (response && response.length) {
+
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+
+                        s += '<option value=' + ri.Id + '>' + ri.Name + '</option>'
+                    }
+                }
+
+                tb.append(s);
+                tb.html(s);
+            }
+        });
+    }
+
+    function isNULL(value) {
+        if (value == null)
+            return "";
+        else
+            return value;
+    }
+
+    var pageSize = 10;
+    var pageIndex = 1;
+    function ListHoSo() {
+        var stt = ((pageIndex - 1) * 10) + 1;
+
+        $.ajax({
+            type: "get",
+            url: "ListHoSo/",
+            data: 'pageIndex=' + pageIndex + '&pageSize=' + pageSize,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                var tb = $('#table1');
+                tb.empty();
+                var s;
+                var response = jQuery.parseJSON(JSON.stringify(data));
+                if (response && response.length) {
+                    for (var i = 0, l = response.length; i < l; i++) {
+                        var ri = response[i];
+                        s += "<tr>";
+                        s += "<td class='text-center'><h5><span class='glyphicon glyphicon-edit' data-target='#input_modal_lohang' data-toggle='modal' onclick=GetHoSoByID('" + ri.ID + "');></span>&nbsp;&nbsp;<span class='glyphicon glyphicon-trash' data-target='#confirm_modal' data-toggle='modal' onclick=DeleteHoSo('" + ri.ID + "');></span></h5></td>";
+                        s += "<td class='text-center'><h5>" + stt +"</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.sochungthu) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngaycapchungthu) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.tenctyxk + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.tenctynk + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.sohopdong) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngay_hopdong) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.sotkhq) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngaytkhq) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.sodangky) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngay_dangky) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.tennhomhang) + "</h5></td>";
+                        if (ri.maudich == null) {
+                            s += "<td class='text-center'></td>";
+                        } else {
+                            if (ri.maudich == false) {
+                                s += "<td class='text-center'><input type='checkbox' style='width:18px;'/></td>";
+                            } else {
+                                s += "<td class='text-center'><input type='checkbox' style='width:18px;' checked/></td>";
+                            }
+
+                        }
+                        
+                        s += "<td class='text-center'><h5>" + isNULL(ri.xuatxu) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.hansudung) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.sovandon) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngay_vandon) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.donvitinh) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.soluong + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.NW + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.GW + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.giatrilohang + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.cuakhaudi) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.cuakhauden) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngaylaymau) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.diadiemlaymau) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.ngayguimau) + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + ri.chiphidangky + "</h5></td>";
+                        s += "<td class='text-center'><h5>" + isNULL(ri.motavandekiemtra) + "</h5></td>";
+                        if (ri.ketqua == null) {
+                            s += "<td class='text-center'></td>";
+                        } else {
+                            if (ri.ketqua == false) {
+                                s += "<td class='text-center'><input type='checkbox' style='width:18px;'/></td>";
+                            } else {
+                                s += "<td class='text-center'><input type='checkbox' style='width:18px;' checked/></td>";
+                            }
+
+                        }
+                        
+                        s += "<td class='text-center'><h5>" + isNULL(ri.sophieuthu) + "</h5></td>";
+                        s += "</tr>";
+                        stt++;
+                    }
+                }
+
+                tb.append(s);
+                tb.html(s);
+            }
+        });
+    }
+    var idHoSo = 0;
+    function GetHoSoByID(id) {
+        idHoSo = id;
+        var ctyxuatkhau = document.getElementById("cbb_ctyxuatkhau");
+        var ctynhapkhau = document.getElementById("cbb_ctynhapkhau");
+        var sodangky = $('#input_sodangky');
+        var ngaydangky = $('#input_ngaydangky');
+        var maudich = $('#input_maudich');
+        var nhomhanghoa = document.getElementById("cbb_nhomhanghoa");
+        var xuatxu = document.getElementById("cbb_xuatxu");
+        var donvi = document.getElementById("cbb_donvi");
+        var soluong = $('#input_soluong');
+        var nw = $('#input_nw');
+        var gw = $('#input_gw');
+        var giatrilohang = $('#input_giatrilohang');
+        var ngaylaymau = $('#input_ngaylaymau');
+        var diadiemlaymau = $('#input_diadiemlaymau');
+        var chiphidangky = $('#input_chiphidangky');
+        var sophieuthu = $('#input_sophieuthu');
+        var sochungthu = $('#input_sochungthu');
+        var ngaycap = $('#input_ngaycap');
+
+        $('#error').hide();
+        $.ajax({
+            type: "get",
+            url: "GetHoSoByID/",
+            data: 'id=' + idHoSo,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (data) {
+                for (var i = 0; i < ctyxuatkhau.options.length; i++) {
+                    if (ctyxuatkhau.options[i].value == data.idctyxk) {
+                        ctyxuatkhau.selectedIndex = i;
+                        break;
+                    } else {
+                        ctyxuatkhau.selectedIndex = 0;
+                    }
+                }
+                LoadDiaChiCTyXuatKhau(ctyxuatkhau);
+                for (var i = 0; i < ctynhapkhau.options.length; i++) {
+                    if (ctynhapkhau.options[i].value == data.idctynk) {
+                        ctynhapkhau.selectedIndex = i;
+                        break;
+                    } else {
+                        ctynhapkhau.selectedIndex = 0;
+                    }
+                }
+                LoadDiaChiCTyNhapKhau(ctynhapkhau);
+                sodangky.val(data.sodangky);
+                ngaydangky.val(data.ngay_dangky);
+                maudich.attr('checked', data.maudich);
+
+                for (var i = 0; i < nhomhanghoa.options.length; i++) {
+                    if (nhomhanghoa.options[i].value == data.idnhomhang) {
+                        nhomhanghoa.selectedIndex = i;
+                        break;
+                    } else {
+                        nhomhanghoa.selectedIndex = 0;
+                    }
+                }
+
+                for (var i = 0; i < xuatxu.options.length; i++) {
+                    if (xuatxu.options[i].value == data.idxuatxu) {
+                        xuatxu.selectedIndex = i;
+                        break;
+                    } else {
+                        xuatxu.selectedIndex = 0;
+                    }
+                }
+
+                for (var i = 0; i < donvi.options.length; i++) {
+                    if (donvi.options[i].value == data.iddonvitinh) {
+                        donvi.selectedIndex = i;
+                        break;
+                    } else {
+                        donvi.selectedIndex = 0;
+                    }
+                }
+
+                soluong.val(data.soluong);
+                nw.val(data.NW);
+                gw.val(data.GW);
+                giatrilohang.val(data.giatrilohang);
+                ngaylaymau.val(data.ngaylaymau);
+                diadiemlaymau.val(data.diadiemlaymau);
+                chiphidangky.val(data.chiphidangky);
+                sophieuthu.val(data.sophieuthu);
+                sochungthu.val(data.sochungthu);
+                ngaycap.val(data.ngaycapchungthu);
+            }
+        });
+        thaotac = 1;
+
+    }
+
+    function Insert() {
+        var ctyxuatkhau = document.getElementById("cbb_ctyxuatkhau");
+        var ctynhapkhau = document.getElementById("cbb_ctynhapkhau");
+        $('#input_sodangky').val("");
+        $('#input_ngaydangky').val("");
+        $('#input_maudich').attr("checked", false);
+        document.getElementById("cbb_nhomhanghoa").selectedIndex = 0;
+        document.getElementById("cbb_xuatxu").selectedIndex = 0;
+        document.getElementById("cbb_donvi").selectedIndex = 0;
+        $('#input_soluong').val("0");
+        $('#input_nw').val("0");
+        $('#input_gw').val("0");
+        $('#input_giatrilohang').val("0");
+        $('#input_ngaylaymau').val("");
+        $('#input_diadiemlaymau').val("");
+        $('#input_chiphidangky').val("");
+        $('#input_sophieuthu').val("");
+        $('#input_sochungthu').val("");
+        $('#input_ngaycap').val("");
+
+        ctyxuatkhau.selectedIndex = 0;
+        ctynhapkhau.selectedIndex = 0;
+        LoadDiaChiCTyXuatKhau(ctyxuatkhau);
+        LoadDiaChiCTyNhapKhau(ctyxuatkhau);
+
+        thaotac = 0;
+    }
+
+    function Save() {
+        var ctyxuatkhau = document.getElementById("cbb_ctyxuatkhau");
+        var ctynhapkhau = document.getElementById("cbb_ctynhapkhau");
+        var sodangky = $('#input_sodangky');
+        var ngaydangky = $('#input_ngaydangky');
+        var maudich = $('#input_maudich');
+        var nhomhanghoa = document.getElementById("cbb_nhomhanghoa");
+        var xuatxu = document.getElementById("cbb_xuatxu");
+        var donvi = document.getElementById("cbb_donvi");
+        var soluong = $('#input_soluong');
+        var nw = $('#input_nw');
+        var gw = $('#input_gw');
+        var giatrilohang = $('#input_giatrilohang');
+        var ngaylaymau = $('#input_ngaylaymau');
+        var diadiemlaymau = $('#input_diadiemlaymau');
+        var chiphidangky = $('#input_chiphidangky');
+        var sophieuthu = $('#input_sophieuthu');
+        var sochungthu = $('#input_sochungthu');
+        var ngaycap = $('#input_ngaycap');
+
+        if (thaotac == 0) {
+            $.post("InsertHoSo/",
+            {
+                idctyxk: ctyxuatkhau.options[ctyxuatkhau.selectedIndex].value,
+                idctynk: ctynhapkhau.options[ctynhapkhau.selectedIndex].value,
+                sodangky: sodangky.val(),
+                ngaydangky: ngaydangky.val(),
+                maudich: maudich.is(':checked'),
+                idnhomhanghoa: nhomhanghoa.options[nhomhanghoa.selectedIndex].value,
+                idxuatxu: xuatxu.options[xuatxu.selectedIndex].value,
+                iddonvi: donvi.options[donvi.selectedIndex].value,
+                soluong: soluong.val(),
+                nw: nw.val(),
+                gw: gw.val(),
+                giatrilohang: giatrilohang.val(),
+                ngaylaymau: ngaylaymau.val(),
+                diadiemlaymau: diadiemlaymau.val(),
+                chiphidangky: chiphidangky.val(),
+                sophieuthu: sophieuthu.val(),
+                sochungthu: sochungthu.val(),
+                ngaycap: ngaycap.val()
+            },
+            function (data, status) {
+                var response = jQuery.parseJSON(JSON.stringify(data));
+                alert(response);
+                if (response != "0") {
+
+                    ListHoSo();
+                    $('#input_modal_lohang').modal('hide');
+                   // $('#success_modal').modal('show');
+
+                } else {
+                    $('#input_modal_lohang').modal('show');
+                    $('#error').show();
+                }
+
+            });
+        } else {
+            $.post("UpdateHoSo/",
+            {
+                ID: idHoSo,
+                idctyxk: ctyxuatkhau.options[ctyxuatkhau.selectedIndex].value,
+                idctynk: ctynhapkhau.options[ctynhapkhau.selectedIndex].value,
+                sodangky: sodangky.val(),
+                ngaydangky: ngaydangky.val(),
+                maudich: maudich.is(':checked'),
+                idnhomhanghoa: nhomhanghoa.options[nhomhanghoa.selectedIndex].value,
+                idxuatxu: xuatxu.options[xuatxu.selectedIndex].value,
+                iddonvi: donvi.options[donvi.selectedIndex].value,
+                soluong: soluong.val(),
+                nw: nw.val(),
+                gw: gw.val(),
+                giatrilohang: giatrilohang.val(),
+                ngaylaymau: ngaylaymau.val(),
+                diadiemlaymau: diadiemlaymau.val(),
+                chiphidangky: chiphidangky.val(),
+                sophieuthu: sophieuthu.val(),
+                sochungthu: sochungthu.val(),
+                ngaycap: ngaycap.val()
+
+            },
+            function (data, status) {
+                var response = jQuery.parseJSON(JSON.stringify(data));
+                if (response != "0") {
+                    ListHoSo();
+                    $('#input_modal_lohang').modal('hide');
+                    //$('#success_modal').modal('show');
+
+                } else {
+                    $('#input_modal_lohang').modal('show');
+                    $('#error').show();
+                }
+
+            });
+        }
+    }
+
+    function DeleteHoSo(id) {
+        
+        $('#error').hide();
+        $.ajax({
+            type: "get",
+            url: "DeleteHoSo/",
+            data: 'id=' + id,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+
+            success: function (data) {
+                ListHoSo();
+            }
+        });
+
+    }
+
+    function ValidateKeypress(numcheck, e) {
+        var keynum, keychar, numcheck;
+        if (window.event) {//IE
+            keynum = e.keyCode;
+        }
+        else if (e.which) {// Netscape/Firefox/Opera
+            keynum = e.which;
+        }
+        if (keynum == 8 || keynum == 127 || keynum == null || keynum == 9 || keynum == 0 || keynum == 13 || keynum == 46) return true;
+        keychar = String.fromCharCode(keynum);
+        var result = numcheck.test(keychar);
+        return result;
+    }
+
     function An(a) {
         $(a).parent().parent().next().fadeToggle();
     }
@@ -12,39 +574,41 @@
         <div class="modal-dialog" style="width: 90%">
             <div class="modal-content">
                 <div class="modal-header bg-warning" style="margin-bottom:5px;">
-                    <button class="close" data-dismiss="modal" onclick="LoadForm();">&times;</button>
+                    <button class="close" data-dismiss="modal">&times;</button>
                     <div class="modal-title text-primary">Thông tin</div>
                 </div>
-                <div class="modal-body">
-                    <form class="form-horizontal" id="form_input">
+                <div class="modal-body" style="height:480px;">
+                    <form class="form-horizontal" id="form_input_hoso">
                         <div class="form-group col-md-12">
-
                             <div class="col-md-6">
                                 <label for="name" class="control-label text-info">Công ty xuất khẩu</label>
-
-                                <select class="form-control " id="cbb_tenhoahoc" onchange="CapNhatHoaChat1();" required></select>
+                                <div class="input-group input-append">
+                                    <select class="form-control" id="cbb_ctyxuatkhau" onchange="LoadDiaChiCTyXuatKhau(this);" required></select>
+                                    <span class="input-group-addon add-on" onclick=""><span style="height:15px;" class="glyphicon glyphicon-search"></span></span>
+                                </div>
+                                
                             </div>
-
                             <div class="col-md-6">
                                 <label for="name" class="control-label text-info">Địa chỉ</label>
-
-                                <input type="text" class="form-control " id="input_solodauthau" />
+                                <input type="text" class="form-control" id="input_diachictyxuatkhau" required />
                             </div>
-
                         </div>
 
                         <div class="form-group col-md-12">
 
                             <div class="col-md-6">
                                 <label for="name" class="control-label text-info">Công ty nhập khẩu</label>
-
-                                <select class="form-control" id="cbb_tenhoahoc" onchange="CapNhatHoaChat1();" required></select>
+                                <div class="input-group input-append">
+                                    <select class="form-control" id="cbb_ctynhapkhau" onchange="LoadDiaChiCTyNhapKhau(this)" required></select>
+                                    <span class="input-group-addon add-on" onclick=""><span style="height:15px;" class="glyphicon glyphicon-search"></span></span>
+                                </div>
+                                
                             </div>
 
                             <div class="col-md-6">
                                 <label for="name" class="control-label text-info">Địa chỉ</label>
 
-                                <input type="text" class="form-control " id="input_solodauthau" />
+                                <input type="text" class="form-control " id="input_diachictynhapkhau" required />
                             </div>
 
                         </div>
@@ -53,32 +617,35 @@
                             <div class="col-md-2">
                                 <label for="name" class="control-label text-info">Số đăng ký</label>
 
-                                <input type="text" class="form-control " id="input_solodauthau" />
+                                <input type="text" class="form-control " id="input_sodangky" required />
                             </div>
                             <div class="col-md-2">
                                 <label for="name" class="control-label text-info">Ngày đăng ký</label>
                                 <div class="input-group input-append date datePicker">
-                                    <input type="text" class="form-control" id="input_ngaysanxuat" data-provide="datepicker" data-date-format="dd/mm/yyyy" required />
+                                    <input type="text" class="form-control" id="input_ngaydangky" data-provide="datepicker" data-date-format="dd/mm/yyyy" required />
                                     <span class="input-group-addon add-on"><span style="height:10px;" class="glyphicon glyphicon-calendar"></span></span>
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <label for="name" class="control-label text-info">Mậu dịch</label>
-                                <input type="checkbox" name="" class="form-control" />
+                                <input type="checkbox" style="width:18px; margin-left:30px;" class="form-control" id="input_maudich" />
                             </div>
 
                             <div class="col-md-3">
                                 <label for="name" class="control-label text-info">Nhóm hàng hóa</label>
-                                <select class="form-control" id="cbb_nhacungcap" required></select>
-
+                                
+                                <div class="input-group input-append">
+                                    <select class="form-control" id="cbb_nhomhanghoa" required></select>
+                                    <span class="input-group-addon add-on" onclick=""><span style="height:15px;" class="glyphicon glyphicon-plus"></span></span>
+                                </div>
                             </div>
 
                             <div class="col-md-3">
                                 <label for="name" class="control-label text-info">Xuất xứ</label>
                                 <div class="input-group input-append">
-                                    <select class="form-control" id="cbb_nguonkinhphi" required></select>
-                                    <span class="input-group-addon add-on" onclick="ThemNguonKinhPhi();"><span style="height:15px;" class="glyphicon glyphicon-plus"></span></span>
+                                    <select class="form-control" id="cbb_xuatxu" required></select>
+                                    <span class="input-group-addon add-on" onclick=""><span style="height:15px;" class="glyphicon glyphicon-plus"></span></span>
                                 </div>
                             </div>
                         </div>
@@ -88,8 +655,8 @@
                             <div class="col-md-2">
                                 <label for="name" class="control-label text-info">Đơn vị</label>
                                 <div class="input-group input-append">
-                                    <select class="form-control" id="cbb_nguonkinhphi" required></select>
-                                    <span class="input-group-addon add-on" onclick="ThemNguonKinhPhi();"><span class="glyphicon glyphicon-plus"></span></span>
+                                    <select class="form-control" id="cbb_donvi" required></select>
+                                    <span class="input-group-addon add-on" onclick=""><span class="glyphicon glyphicon-plus"></span></span>
                                 </div>
 
                             </div>
@@ -97,79 +664,69 @@
                             <div class="col-md-2">
                                 <label for="name" class="control-label text-info">Số lượng</label>
 
-                                <input type="number" class="form-control" id="input_soluong" required />
+                                <input type="text" class="form-control" id="input_soluong" onkeypress="return ValidateKeypress(/\d/,event);" required />
                             </div>
 
                             <div class="col-md-2">
                                 <label for="name" class="control-label text-info">NW</label>
 
-                                <input type="number" class="form-control" id="input_dongia" required />
+                                <input type="text" class="form-control" id="input_nw" onkeypress="return ValidateKeypress(/\d/,event);" required />
                             </div>
                             <div class="col-md-2">
                                 <label for="name" class="control-label text-info">GW</label>
 
-                                <input type="number" class="form-control" id="input_dongia" required />
+                                <input type="text" class="form-control" id="input_gw" onkeypress="return ValidateKeypress(/\d/,event);" required />
                             </div>
                             <div class="col-md-2">
                                 <label for="name" class="control-label text-info">Gía trị lô hàng</label>
 
-                                <input type="number" class="form-control" id="input_dongia" required />
+                                <input type="text" class="form-control" id="input_giatrilohang" onkeypress="return ValidateKeypress(/\d/,event);" required />
                             </div>
                             <div class="col-md-2">
                                 <label for="name" style="height:15px;" class="control-label text-info">Ngày lấy mẫu</label>
                                 <div class="input-group input-append date datePicker">
-                                    <input type="text" class="form-control" id="input_ngaysanxuat" data-provide="datepicker" data-date-format="dd/mm/yyyy" required />
+                                    <input type="text" class="form-control" id="input_ngaylaymau" data-provide="datepicker" data-date-format="dd/mm/yyyy" required />
                                     <span class="input-group-addon add-on"><span style="height:10px;" class="glyphicon glyphicon-calendar"></span></span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group col-md-12">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="name" class="control-label text-info">Địa điểm lấy mẫu</label>
 
-                                <input type="number" class="form-control" id="input_tongtien" required />
+                                <input type="text" class="form-control" id="input_diadiemlaymau" required />
                             </div>
-
-                            <div class="col-md-2">
-                                <label for="name" style="height:15px;" class="control-label text-info">Ngày gửi mẫu</label>
-                                <div class="input-group input-append date datePicker">
-                                    <input type="text" class="form-control" id="input_ngaysanxuat" data-provide="datepicker" data-date-format="dd/mm/yyyy" required />
-                                    <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
-                                </div>
-                            </div>
-
+                            
 
                             <div class="col-md-3">
                                 <label for="name" class="control-label text-info">Chi phí đăng ký</label>
 
-                                <input type="text" class="form-control " id="input_nguoinhapkho" required />
+                                <input type="text" class="form-control " id="input_chiphidangky" onkeypress="return ValidateKeypress(/\d/,event);" required />
                             </div>
 
                             <div class="col-md-3">
                                 <label for="name" class="control-label text-info">Số phiếu thu</label>
 
-                                <input type="text" class="form-control " id="input_sohoadon" required />
+                                <input type="text" class="form-control " id="input_sophieuthu" required />
                             </div>
                         </div>
                         <div class="form-group col-md-12">
                             <div class="col-md-3">
                                 <label for="name" class="control-label text-info">Số chứng thu</label>
 
-                                <input type="text" class="form-control " id="input_nguoinhapkho" required />
+                                <input type="text" class="form-control " id="input_sochungthu" required />
                             </div>
 
                             <div class="col-md-3">
                                 <label for="name" style="height:15px;" class="control-label text-info">Ngày cấp</label>
                                 <div class="input-group input-append date datePicker">
-                                    <input type="text" style="width:100%; height:25px;" class="form-control" id="input_ngaysanxuat" data-provide="datepicker" data-date-format="dd/mm/yyyy" required />
+                                    <input type="text" style="width:100%;" class="form-control" id="input_ngaycap" data-provide="datepicker" data-date-format="dd/mm/yyyy" required />
                                     <span style="height:10px;" class="input-group-addon add-on"><span style="height:10px;" class="glyphicon glyphicon-calendar"></span></span>
                                 </div>
                             </div>
 
                             <div class="form-group col-md-6">
-                                <div class="col-md-offset-6 col-md-10">
-                                    <button class="btn btn-success"><span class="glyphicon glyphicon-floppy-save"></span>&nbsp;Lưu</button>
-                                </div>
+                                <button class="btn btn-success " style="float:right; margin-top:20px;"><span class="glyphicon glyphicon-floppy-save"></span>&nbsp;Lưu</button>
                             </div>
                         </div>
                     </form>
@@ -180,206 +737,58 @@
             </div>
         </div>
     </div>
-    <div class="panel" style="margin-left:50px; margin-right:50px;">
+    <div class="panel" style="margin-top:1px;">
         <div>
-            <button class="btn btn-success" data-target="#input_modal_lohang" data-toggle="modal" onclick="Them();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Thêm</button>
-            <button class="btn btn-primary" onclick="XuatExcel();"><span class="glyphicon glyphicon-export"></span>&nbsp;Xuất Excel</button>
+            <button class="btn btn-success" data-target="#input_modal_lohang" data-toggle="modal" onclick="Insert();"><span class="glyphicon glyphicon-plus"></span>&nbsp;Thêm</button>
+            
         </div>
     </div>
 
-    <div class="panel panel-primary" style="margin-left:50px; margin-right:50px;">
-        <div class="panel-heading"><span class="glyphicon glyphicon-list"></span>&nbsp;Thông tin lô hàng</div>
-        <div class="panel-body">
-            <div style="width: 100%; overflow-x: scroll;">
-                <table class="table-hover table-bordered container container-fluid" style="width:4000px;">
-                    <thead>
-                        <tr class="bg-primary">
-                            <th class="text-center" style="width:50px;"></th>
-                            <th class="text-center" style="width:50px;"><h5>STT</h5></th>
-                            <th class="text-center" style="width:100px;"><h5>Số chứng thư</h5></th>
-                            <th class="text-center" style="width:80px;"><h5>Ngày</h5></th>
-                            <th class="text-center" style="width:500px;"><h5>Tên Cty xuất khẩu</h5></th>
-                            <th class="text-center" style="width:500px;"><h5>Tên Cty nhập khẩu</h5></th>
-                            <th class="text-center" style="width:100px;"><h5>Số hợp đồng</h5></th>
-                            <th class="text-center" style="width:80px;"><h5>Ngày</h5></th>
-                            <th class="text-center" style="width:100px;"><h5>Số TKHQ</h5></th>
-                            <th class="text-center" style="width:80px;"><h5>Ngày</h5></th>
-                            <th class="text-center" style="width:100px;"><h5>Số ĐK</h5></th>
-                            <th class="text-center" style="width:80px;"><h5>Ngày</h5></th>
-                            <th class="text-center"><h5>Nhóm hàng hóa</h5></th>
-                            <th class="text-center"><h5>Loại hàng hóa</h5></th>
-                            <th class="text-center"><h5>Xuất xứ</h5></th>
-                            <th class="text-center"><h5>Hạn sử dụng</h5></th>
-                            <th class="text-center"><h5>Vận đơn</h5></th>
-                            <th class="text-center"><h5>Ngày</h5></th>
-                            <th class="text-center"><h5>Đơn vị</h5></th>
-                            <th class="text-center"><h5>Số lượng</h5></th>
-                            <th class="text-center"><h5>NW</h5></th>
-                            <th class="text-center"><h5>GW</h5></th>
-                            <th class="text-center"><h5>Giá trị lô hàng</h5></th>
-                            <th class="text-center"><h5>Cửa khẩu đi</h5></th>
-                            <th class="text-center"><h5>Cửa khẩu đến</h5></th>
-                            <th class="text-center"><h5>Ngày lấy mẫu</h5></th>
-                            <th class="text-center"><h5>Địa điểm lấy mẫu</h5></th>
-                            <th class="text-center"><h5>Ngày gửi mẫu</h5></th>
-                            <th class="text-center"><h5>Chi phí đăng ký</h5></th>
-                            <th class="text-center"><h5>Vấn đề kiểm tra</h5></th>
-                            <th class="text-center"><h5>Số phiếu thu</h5></th>
-                            <th class=""></th>
-                        </tr>
-                    </thead>
+    <div class="panel panel-primary" style="height:370px;">
+    <div class="panel-heading"><span class="glyphicon glyphicon-list"></span>&nbsp;Thông tin lô hàng</div>
+    <div class="panel-body">
+        <div style="width: 100%; height:310px; overflow-x: scroll;">
+            <table class="table-hover table-bordered container container-fluid" style="width:4000px;">
+                <thead>
+                    <tr class="bg-primary">
+                        <th class="text-center" style="width:50px;"></th>
+                        <th class="text-center" style="width:50px;"><h5>STT</h5></th>
+                        <th class="text-center" style="width:100px;"><h5>Số chứng thư</h5></th>
+                        <th class="text-center" style="width:80px;"><h5>Ngày</h5></th>
+                        <th class="text-center" style="width:400px;"><h5>Tên Cty xuất khẩu</h5></th>
+                        <th class="text-center" style="width:400px;"><h5>Tên Cty nhập khẩu</h5></th>
+                        <th class="text-center" style="width:100px;"><h5>Số hợp đồng</h5></th>
+                        <th class="text-center" style="width:80px;"><h5>Ngày</h5></th>
+                        <th class="text-center" style="width:100px;"><h5>Số TKHQ</h5></th>
+                        <th class="text-center" style="width:80px;"><h5>Ngày</h5></th>
+                        <th class="text-center" style="width:100px;"><h5>Số ĐK</h5></th>
+                        <th class="text-center" style="width:80px;"><h5>Ngày</h5></th>
+                        <th class="text-center"><h5>Nhóm hàng hóa</h5></th>
+                        <th class="text-center"><h5>Mậu dịch</h5></th>
+                        <th class="text-center"><h5>Xuất xứ</h5></th>
+                        <th class="text-center"><h5>Hạn sử dụng</h5></th>
+                        <th class="text-center"><h5>Vận đơn</h5></th>
+                        <th class="text-center"><h5>Ngày</h5></th>
+                        <th class="text-center"><h5>Đơn vị</h5></th>
+                        <th class="text-center"><h5>Số lượng</h5></th>
+                        <th class="text-center"><h5>NW</h5></th>
+                        <th class="text-center"><h5>GW</h5></th>
+                        <th class="text-center"><h5>Giá trị lô hàng</h5></th>
+                        <th class="text-center"><h5>Cửa khẩu đi</h5></th>
+                        <th class="text-center"><h5>Cửa khẩu đến</h5></th>
+                        <th class="text-center"><h5>Ngày lấy mẫu</h5></th>
+                        <th class="text-center"><h5>Địa điểm lấy mẫu</h5></th>
+                        <th class="text-center"><h5>Ngày gửi mẫu</h5></th>
+                        <th class="text-center"><h5>Chi phí đăng ký</h5></th>
+                        <th class="text-center"><h5>Vấn đề kiểm tra</h5></th>
+                        <th class="text-center"><h5>Đã xử lý</h5></th>
+                        <th class="text-center"><h5>Số phiếu thu</h5></th>
+                    </tr>
+                </thead>
 
-                    <tbody id="table1">
-                        <tr class="bg-primary">
-                            <td class="text-center" data-target="#input_modal_mathang" data-toggle="modal" onclick="ThemMatHang();">Thêm</td>
-                            <td class="text-center"><h5>STT</h5></td>
-                            <td class="text-center"><h5>Số hợp đồng</h5></td>
-                            <td class="text-center"><h5>Ngày</h5></td>
-                            <td class="text-center"><h5>Tên Cty xuất khẩu</h5></td>
-                            <td class="text-center"><h5>Tên Cty nhập khẩu</h5></td>
-                            <td class="text-center"><h5>Số hợp đồng</h5></td>
-                            <td class="text-center"><h5>Ngày</h5></td>
-                            <td class="text-center"><h5>Số TKHQ</h5></td>
-                            <td class="text-center"><h5>Ngày</h5></td>
-                            <td class="text-center"><h5>Số ĐK</h5></td>
-                            <td class="text-center"><h5>Ngày</h5></td>
-                            <td class="text-center"><h5>Nhóm hàng hóa</h5></td>
-                            <td class="text-center"><h5>Loại hàng hóa</h5></td>
-                            <td class="text-center"><h5>Xuất xứ</h5></td>
-                            <td class="text-center"><h5>Hạn sử dụng</h5></td>
-                            <td class="text-center"><h5>Vận đơn</h5></td>
-                            <td class="text-center"><h5>Ngày</h5></td>
-                            <td class="text-center"><h5>Đơn vị</h5></td>
-                            <td class="text-center"><h5>Số lượng</h5></td>
-                            <td class="text-center"><h5>NW</h5></td>
-                            <td class="text-center"><h5>GW</h5></td>
-                            <td class="text-center"><h5>Giá trị lô hàng</h5></td>
-                            <td class="text-center"><h5>Cửa khẩu đi</h5></td>
-                            <td class="text-center"><h5>Cửa khẩu đến</h5></td>
-                            <td class="text-center"><h5>Ngày lấy mẫu</h5></td>
-                            <td class="text-center"><h5>Địa điểm lấy mẫu</h5></td>
-                            <td class="text-center"><h5>Ngày gửi mẫu</h5></td>
-                            <td class="text-center"><h5>Chi phí đăng ký</h5></td>
-                            <td class="text-center"><h5>Vấn đề kiểm tra</h5></td>
-                            <td class="text-center"><h5>Số phiếu thu</h5></td>
-                            <td class=""><div onclick="An(this);">aaa</div></td>
-                        </tr>
-                        <tr>
-                            <td colspan="31">
-                                <table class="table-hover table-bordered container container-fluid" style="width:4000px;">
-                                    <thead>
-                                        <tr class="bg-primary">
-                                            <th class="text-center" style="width:50px;"><h5>STT</h5></th>
-                                            <th class="text-center" style="width:100px;"><h5>Tên mặt hàng</h5></th>
-                                            <th class="text-center" style="width:80px;"><h5>Nơi sản xuất</h5></th>
-                                            <th class="text-center" style="width:200px;"><h5>Số lượng</h5></th>
-                                            <th class="text-center" style="width:200px;"><h5>Khối lượng</h5></th>
-                                            <th class="text-center" style="width:100px;"><h5>Giá trị hàng hóa</h5></th>
-                                            <th class="text-center" style="width:80px;"><h5>Số đăng ký</h5></th>
-                                            <th class="text-center" style="width:100px;"><h5>Chế độ kiểm tra</h5></th>
-                                            <th class="text-center" style="width:80px;"><h5>Kết quả</h5></th>
-                                            <th class="text-center" style="width:100px;"><h5>Lý do không đạt</h5></th>
-                                            <th class="text-center" style="width:80px;"><h5>Biện pháp xử lý</h5></th>
-                                            <th class="text-center"><h5>Số công bố</h5></th>
-                                            <th class=""></th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody id="table1">
-                                        <tr class="bg-primary">
-                                            <td class="text-center" style="width:50px;"><h5>STT</h5></td>
-                                            <td class="text-center" style="width:100px;"><h5>Tên mặt hàng</h5></td>
-                                            <td class="text-center" style="width:80px;"><h5>Nơi sản xuất</h5></td>
-                                            <td class="text-center" style="width:200px;"><h5>Số lượng</h5></td>
-                                            <td class="text-center" style="width:200px;"><h5>Khối lượng</h5></td>
-                                            <td class="text-center" style="width:100px;"><h5>Giá trị hàng hóa</h5></td>
-                                            <td class="text-center" style="width:80px;"><h5>Số đăng ký</h5></td>
-                                            <td class="text-center" style="width:100px;"><h5>Chế độ kiểm tra</h5></td>
-                                            <td class="text-center" style="width:80px;"><h5>Kết quả</h5></td>
-                                            <td class="text-center" style="width:100px;"><h5>Lý do không đạt</h5></td>
-                                            <td class="text-center" style="width:80px;"><h5>Biện pháp xử lý</h5></td>
-                                            <td class="text-center"><h5>Số công bố</h5></td>
-                                            <td class=""></td>
-                                        </tr>
-                                    </tbody>
-                                 </table>
-                            </td>
-                        </tr>
-                        
-                    </tbody>
-                </table>
-                <div class="text-center" id="page">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-<div class="modal fade" id="input_modal_mathang" style="width:100%">
-    <div class="modal-dialog" style="width: 90%">
-        <div class="modal-content">
-            <div class="modal-header bg-warning" style="margin-bottom:5px;">
-                <button class="close" data-dismiss="modal" onclick="LoadForm();">&times;</button>
-                <div class="modal-title text-primary">Thông tin</div>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal" id="form_input">
-                    <div class="form-group col-md-12">
-
-                        <div class="col-md-6">
-                            <label for="name" class="control-label text-info">Tên mặt hàng</label>
-
-                            <input type="text" class="form-control " id="input_solodauthau" />
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="name" class="control-label text-info">Nơi sản xuất</label>
-
-                            <select class="form-control" id="cbb_tenhoahoc" onchange="CapNhatHoaChat1();" required></select>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="name" class="control-label text-info">Số lượng</label>
-
-                            <input type="text" class="form-control " id="input_solodauthau" />
-                        </div>
-                    </div>
-
-                    <div class="form-group col-md-12">
-
-                        <div class="col-md-3">
-                            <label for="name" class="control-label text-info">Khối lượng</label>
-
-                            <input type="text" class="form-control " id="input_solodauthau" />
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="name" class="control-label text-info">Giá trị hàng hóa</label>
-
-                            <input type="text" class="form-control " id="input_solodauthau" />
-                        </div>
-
-                        <div class="col-md-2">
-                            <label for="name" class="control-label text-info">Chế độ kiểm</label>
-
-                            <select class="form-control" id="cbb_tenhoahoc" onchange="CapNhatHoaChat1();" required></select>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label for="name" class="control-label text-info">Số công bố</label>
-
-                            <input type="text" class="form-control " id="input_solodauthau" />
-                        </div>
-                        <div class="col-md-1">
-                            <button class="btn btn-success" style="margin-top:25px;"><span class="glyphicon glyphicon-floppy-save"></span>&nbsp;Lưu</button>
-                        </div>
-                    </div>
-                    
-                </form>
-            </div>
-            <div class="modal-footer bg-danger text-center" id="error" style="display:none;">
-                <h5 style="color:red;">LỖI: Cập nhật không thành công</h5>
-            </div>
+                <tbody id="table1"></tbody>
+            </table>
+            
         </div>
     </div>
 </div>

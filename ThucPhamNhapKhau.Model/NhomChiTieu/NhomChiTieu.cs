@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ThucPhamNhapKhau.Model.NhomMatHang
+namespace ThucPhamNhapKhau.Model.NhomChiTieu
 {
     [ProtoContract]
     public class NhomChiTieu

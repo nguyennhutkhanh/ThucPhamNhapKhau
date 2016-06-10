@@ -30,8 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=4.1.0.0, Culture=neutral, PublicKeyToken=e44a2bc38ed2c13c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Documents\Visual Studio 2013\Projects\QLNhanSu_Winform\QLNhanSu_Winform\Connect\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data">
+      <HintPath>..\..\..\..\Documents\Visual Studio 2013\Projects\QLNhanSu_Winform\QLNhanSu_Winform\Connect\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
     <Reference Include="protobuf-net">
-      <HintPath>..\..\..\..\..\Downloads\protobuf-net.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\ITEProjects\BlogTruyenV5\BlogTruyen.Model\bin\Debug\protobuf-net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -42,23 +50,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChiTietMatHang\Request\ChiTietMatHangItem.cs" />
+    <Compile Include="ChiTietMatHang\Response\ChiTietMatHangItemRes.cs" />
+    <Compile Include="ChiTietMatHang\Response\ChiTietMatHangRes.cs" />
+    <Compile Include="ChiTieuMatHang\Response\ChiTieuMatHangRes.cs" />
     <Compile Include="ChiTieu\ChiTieu.cs" />
-    <Compile Include="Class1.cs" />
+    <Compile Include="ChungThu\KetQua.cs" />
     <Compile Include="Common\CUDMessage.cs" />
     <Compile Include="Common\HashValue.cs" />
     <Compile Include="CTyNhapKhau\CTyNhapKhau.cs" />
     <Compile Include="CTyXuatKhau\CTyXuatKhau.cs" />
     <Compile Include="CuaKhau\CuaKhau.cs" />
+    <Compile Include="ChungThu\ChungThuReq.cs" />
+    <Compile Include="ChungThu\ChungThuRes.cs" />
     <Compile Include="LoaiKiemTra\LoaiKiemTra.cs" />
-    <Compile Include="LoHang\Request\ThongTinLoHang.cs" />
-    <Compile Include="LoHang\Request\KetQuaKiemTra.cs" />
-    <Compile Include="MatHang\MatHang.cs" />
+    <Compile Include="MatHang\Response\MatHangRes.cs" />
+    <Compile Include="NhanHoSo\Request\HoSo.cs" />
+    <Compile Include="NhanHoSo\Request\KetQuaKiemTra.cs" />
+    <Compile Include="MatHang\Request\MatHangItem.cs" />
+    <Compile Include="NhanHoSo\Response\HoSoRes.cs" />
+    <Compile Include="NhanHoSo\Response\LoHang.cs" />
     <Compile Include="NhomChiTieu\NhomChiTieu.cs" />
     <Compile Include="NhomMatHang\NhomMatHang.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="LoHang\Response\" />
+    <Folder Include="ChiTieuMatHang\Request\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

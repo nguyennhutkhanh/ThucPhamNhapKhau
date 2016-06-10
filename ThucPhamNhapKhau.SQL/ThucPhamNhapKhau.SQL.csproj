@@ -39,9 +39,43 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="ChiTietMatHang\SP_ChiTietMatHang_GetChiTietMatHangByID.sql" />
+    <Content Include="ChiTietMatHang\SP_ChiTietMatHang_GetChiTietMatHangByIDMatHang.sql" />
+    <Content Include="ChiTietMatHang\SP_ChiTietMatHang_Insert.sql" />
+    <Content Include="ChiTietMatHang\SP_ChiTietMatHang_Update.sql" />
+    <Content Include="ChiTietMatHang\SP_ChiTietMatHang_Delete.sql" />
+    <Content Include="ChiTieuCuaMatHang\SP_ChiTieuMatHang_Delete.sql" />
+    <Content Include="ChiTieuCuaMatHang\SP_GetChiTieuByIDChiTietMatHang.sql" />
+    <Content Include="ChiTieuCuaMatHang\SP_ChiTieuMatHang_Insert.sql" />
+    <Content Include="ChiTieu\SP_ChiTieu_GetList.sql" />
+    <Content Include="CTyNhapKhau\SP_CongTyNhapKhau_GetDiaChi.sql" />
+    <Content Include="CTyNhapKhau\SP_CongTyNhapKhau_GetList.sql" />
+    <Content Include="CTyXuatKhau\SP_CongTyXuatKhau_GetDiaChi.sql" />
+    <Content Include="CTyXuatKhau\SP_CongTyXuatKhau_GetList.sql" />
+    <Content Include="CuaKhau\SP_CuaKhau_GetList.sql" />
+    <Content Include="DanhChungThu\SP_DanhChungThu_GetKetQuaByID.sql" />
+    <Content Include="DanhChungThu\SP_DanhChungThu_GetChungThuByIDLoHang.sql" />
+    <Content Include="DanhChungThu\SP_DanhChungThu_UpdateKetQua.sql" />
+    <Content Include="DanhChungThu\SP_DanhChungThu_Update.sql" />
+    <Content Include="DonViTinh\SP_DonViTinh_GetList.sql" />
+    <Content Include="LoaiKiemTra\SP_LoaiKiemTra_GetList.sql" />
+    <Content Include="MatHang\SP_MatHang_GetMatHangByID.sql" />
+    <Content Include="MatHang\SP_MatHang_GetByIDLoHang.sql" />
+    <Content Include="MatHang\SP_MatHang_Insert.sql" />
+    <Content Include="MatHang\SP_MatHang_Update.sql" />
+    <Content Include="MatHang\SP_MatHang_Delete.sql" />
+    <Content Include="NhanHoSo\SP_HoSo_GetHoSoByID.sql" />
+    <Content Include="NhanHoSo\SP_HoSo_GetList.sql" />
+    <Content Include="NhanHoSo\SP_NhanHoSo_Delete.sql" />
+    <Content Include="NhanHoSo\SP_NhanHoSo_Update.sql" />
+    <Content Include="NhanHoSo\SP_NhanHoSo_Insert.sql" />
+    <Content Include="NhomMatHang\SP_NhomHang_GetList.sql" />
+    <Content Include="QuocGia\SP_QuocGia_GetList.sql" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

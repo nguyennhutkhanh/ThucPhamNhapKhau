@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data">
+      <HintPath>..\..\..\..\Documents\Visual Studio 2013\Projects\QLNhanSu_Winform\QLNhanSu_Winform\Connect\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,10 +42,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChiTietMatHang\IChiTietMatHangData.cs" />
+    <Compile Include="ChiTietMatHang\ChiTietMatHangData.cs" />
+    <Compile Include="ChiTieu\ChiTieuData.cs" />
+    <Compile Include="ChiTieu\IChiTieuData.cs" />
+    <Compile Include="ChungThu\ChungThuData.cs" />
+    <Compile Include="ChungThu\IChungThuData.cs" />
     <Compile Include="Common.cs" />
-    <Compile Include="LoHang\ILoHangData.cs" />
-    <Compile Include="LoHang\LoHangData.cs" />
+    <Compile Include="CTyNhapKhau\CTyNhapKhauData.cs" />
+    <Compile Include="CTyNhapKhau\ICTyNhapKhauData.cs" />
+    <Compile Include="CTyXuatKhau\CTyXuatKhauData.cs" />
+    <Compile Include="CTyXuatKhau\ICTyXuatKhauData.cs" />
+    <Compile Include="CuaKhau\CuaKhauData.cs" />
+    <Compile Include="CuaKhau\ICuaKhauData.cs" />
+    <Compile Include="DinhChiTieu\DinhChiTieuData.cs" />
+    <Compile Include="DinhChiTieu\IDinhChiTieuData.cs" />
+    <Compile Include="DonViTinh\DonViTinhData.cs" />
+    <Compile Include="DonViTinh\IDonViTinhData.cs" />
+    <Compile Include="LoaiKiemTra\LoaiKiemTraData.cs" />
+    <Compile Include="LoaiKiemTra\ILoaiKiemTraData.cs" />
+    <Compile Include="MatHang\MatHangData.cs" />
+    <Compile Include="MatHang\IMatHangData.cs" />
+    <Compile Include="NhanHoSo\HoSoData.cs" />
+    <Compile Include="NhanHoSo\IHoSoData.cs" />
+    <Compile Include="NhomHangHoa\NhomHangData.cs" />
+    <Compile Include="NhomHangHoa\INhomHangData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XuatXu\IXuatXuData.cs" />
+    <Compile Include="XuatXu\XuatXuData.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -52,7 +79,12 @@
       <Project>{83aa6d04-8249-4525-bb64-f719a8fdb923}</Project>
       <Name>ThucPhamNhapKhau.Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ThucPhamNhapKhau.Model\ThucPhamNhapKhau.Model.csproj">
+      <Project>{d05d326a-a02c-43b2-9adc-b3cca5c28f48}</Project>
+      <Name>ThucPhamNhapKhau.Model</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
